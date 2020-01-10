@@ -209,7 +209,7 @@ bool Dx11_Direct3D::Initialize(HWND hWnd, int screenWidth, int screenHeight)
 							{
 								// Now set the rasterizer state.
 								//m_pDeviceContext->RSSetState(m_pRasterStateFront);							 
-								m_pDeviceContext->RSSetState(m_pRasterState);
+								m_pDeviceContext->RSSetState(/*m_pRasterState*/m_pRasterWireFrameState);
 
 
 

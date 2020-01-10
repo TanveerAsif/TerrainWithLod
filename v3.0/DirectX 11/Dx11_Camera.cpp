@@ -5,7 +5,7 @@ Dx11_Camera::Dx11_Camera()
 {
 	m_fYaw = m_fPitch = m_fRoll = 0.0f;
 	m_vUp = D3DXVECTOR3(0, 1, 0);
-	m_vPos = D3DXVECTOR3(0, 0, -10);
+	m_vPos = D3DXVECTOR3(19.0f, 2.0f, 20.0f);
 	m_vFrwdDir = D3DXVECTOR3(0, 0, 1);
 	
 	/*D3DXVECTOR3 vDir;
