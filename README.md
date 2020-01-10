@@ -1,2 +1,3 @@
 # VisualizationEngine-DirectX11
-Visualization project to demonstrate Volume Rendering, Mesh Rendering, Ocean Wave, lights and reflection effects etc.
+Visualization project to demonstrate Terrain with different LOD.
+Terrain maintains by QuadTree, Render through Tessellation Shader with different LOD value based on camera distance from Quad center point.
