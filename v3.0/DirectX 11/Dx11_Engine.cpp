@@ -156,6 +156,12 @@ bool Dx11_Engine::UpdateKeyPress()
 		m_pGraphics->SetTessellationFactor(1);
 	}
 
+	if (m_pInput->IsKeyDown('P'))
+	{
+		m_pInput->KeyUp('P');
+		m_pGraphics->UpdateCamera('P');
+	}
+
 	if (m_pInput->IsKeyDown('Y'))
 	{
 		m_pInput->KeyUp('Y');

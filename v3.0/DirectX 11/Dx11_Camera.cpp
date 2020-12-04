@@ -185,17 +185,18 @@ void Dx11_Camera::UpdateCamera(char in)
 			break;
 		}
 
-		/*case 'T':		
+		case 'P':		
 		{
 			if (m_fPitch < 6.28)
-				m_fPitch += 0.05f;
+				m_fPitch -= 0.05f;
 			else
 				m_fPitch = 0.0f;
-			break;
-		}*/
 
-		/*case WM_MOUSEHWHEEL:
-			m_fPitch -= 0.05f;*/
+			break;
+		}
+
+		case WM_MOUSEHWHEEL:
+			m_fPitch -= 0.05f;
 
 			break;
 	}
@@ -205,11 +206,13 @@ void Dx11_Camera::UpdateCamera(char in)
 	vDir.y = sinf(m_fPitch);
 	vDir.z = cosf(m_fPitch)*cosf(m_fYaw);
 
-	D3DXVECTOR2 vFrwdDir = D3DXVECTOR2(vDir.x, vDir.z);
+	/*D3DXVECTOR2 vFrwdDir = D3DXVECTOR2(vDir.x, vDir.z);
 	D3DXVec2Normalize(&vFrwdDir, &vFrwdDir);
-	m_vFrwdDir = D3DXVECTOR3(vFrwdDir.x, 0.0f, vFrwdDir.y);
-	//m_vFrwdDir = vDir;
+	m_vFrwdDir = D3DXVECTOR3(vFrwdDir.x, 0.0f, vFrwdDir.y);*/
 
+	D3DXVec3Normalize(&m_vFrwdDir, &vDir);
+	//m_vFrwdDir = vDir;
+	
 
 	D3DXVECTOR3 vTarget;
 	D3DXVec3Add(&vTarget, &m_vPos, &m_vFrwdDir);
