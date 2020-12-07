@@ -5,6 +5,7 @@
 #include <string>
 
 //Render the Terrain : instead of Dx11_Terrain
+class Dx11_Texture;
 class Dx11_Terrain2
 {
 	
@@ -26,6 +27,10 @@ private:
 	struct stHeightMap
 	{
 		float x, y, z;
+		float tX, tY;
+		float nX;
+		float nY;
+		float nZ;
 	};
 	stHeightMap*			m_pHeightMap;
 	
@@ -43,6 +48,8 @@ private:
 	bool					InitBuffer(ID3D11Device* _pDevice);
 	bool					LoadHeightMap(std::string _sHeightMapFile);
 	
+	Dx11_Texture			*m_pTexture;
+
 public:
 	Dx11_Terrain2();
 	~Dx11_Terrain2();

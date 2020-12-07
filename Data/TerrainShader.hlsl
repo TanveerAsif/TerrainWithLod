@@ -44,7 +44,11 @@ PixelInput MyVertexShader(VertexInput input)
 ////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////       PS : Pixel Shader                //////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
+Texture2D		myTexture;
+SamplerState textureSampler;
 float4 MyPixelShader(PixelInput input) : SV_TARGET
 {
-	return float4(1.0, 1.0, 1.0, 1.0);
+	float4 texColor = myTexture.Sample(textureSampler, input.tex);
+	//return float4(input.normal.x, 0, 0, 1.0);
+	return texColor;
 };
