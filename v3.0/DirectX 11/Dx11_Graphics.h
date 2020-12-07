@@ -10,6 +10,7 @@
 #include "Dx11_Tessellation.h"
 
 #include "Dx11_Terrain.h"
+#include "Dx11_Terrain2.h"
 #include "Dx11_QuadTree.h"
 
 
@@ -32,6 +33,7 @@ private:
 	Dx11_Assimp				*m_pAssimp = NULL;	
 	Dx11_Tessellation		*m_pTessellation = nullptr;
 	Dx11_Terrain			*m_pTerrain = nullptr;
+	Dx11_Terrain2			*m_pTerrain2 = nullptr;
 	Dx11_QuadTree			*m_pQuadTree = nullptr;
 
 	UINT					m_nScreenWidth, m_nScreenHeight;

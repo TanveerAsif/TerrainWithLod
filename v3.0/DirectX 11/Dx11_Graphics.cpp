@@ -69,10 +69,15 @@ bool Dx11_Graphics::Initialize(HWND hWnd, UINT _width, UINT _height)
 			return bRetValue;
 		}*/
 
-		m_pTessellation = new Dx11_Tessellation();
-		bRetValue = m_pTessellation->Init(pDevice, pDeviceContext);
+		m_pTerrain2 = new Dx11_Terrain2();
+		m_pTerrain2->Init(pDevice);
 		if (!bRetValue)
 			return bRetValue;
+
+		/*m_pTessellation = new Dx11_Tessellation();
+		bRetValue = m_pTessellation->Init(pDevice, pDeviceContext);
+		if (!bRetValue)
+			return bRetValue;*/
 
 	}
 	else
@@ -151,6 +156,12 @@ void Dx11_Graphics::RenderScene(float _fTick)
 			worldMat = matScale * matRotY * matTranslate * worldMat;
 
 			m_pAssimp->Render(m_pDirect3D->GetDevice(), pDeviceContext, worldMat, viewMat, projectionMat);
+		}
+
+		if (m_pTerrain2)
+		{
+			worldMat = m_pDirect3D->GetWorldMatrix();
+			m_pTerrain2->Render(pDeviceContext, worldMat, viewMat, projectionMat, m_pCamera->GetPosition());
 		}
 
 		if (m_pTessellation)

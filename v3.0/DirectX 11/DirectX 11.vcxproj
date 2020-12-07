@@ -322,6 +322,7 @@
     <ClCompile Include="Dx11_Render2Texture.cpp" />
     <ClCompile Include="Dx11_Shaders.cpp" />
     <ClCompile Include="Dx11_Terrain.cpp" />
+    <ClCompile Include="Dx11_Terrain2.cpp" />
     <ClCompile Include="Dx11_Tessellation.cpp" />
     <ClCompile Include="Dx11_Texture.cpp" />
     <ClCompile Include="Dx11_VolumeRendering.cpp" />
@@ -344,6 +345,7 @@
     <ClInclude Include="Dx11_Render2Texture.h" />
     <ClInclude Include="Dx11_Shaders.h" />
     <ClInclude Include="Dx11_Terrain.h" />
+    <ClInclude Include="Dx11_Terrain2.h" />
     <ClInclude Include="Dx11_Tessellation.h" />
     <ClInclude Include="Dx11_Texture.h" />
     <ClInclude Include="Dx11_VolumeRendering.h" />
