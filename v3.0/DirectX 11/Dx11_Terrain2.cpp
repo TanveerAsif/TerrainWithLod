@@ -323,7 +323,9 @@ bool Dx11_Terrain2::Init(ID3D11Device* _pDevice)
 		m_pTexture2->Initiazlize(_pDevice, L"../../Data/snow_02_diff_1k.dds");
 
 		//First need to be initialize height map before init buffers
-		if(this->LoadHeightMap("../../Data/heightmap01.bmp"))
+		//if(this->LoadHeightMap("../../Data/heightmap01.bmp"))
+		//if (this->LoadHeightMap("../../Data/Terrain/heightmap.bmp"))
+		if (this->LoadHeightMap("../../Data/Terrain/heightmapSmiley.bmp"))			
 			return this->InitBuffer(_pDevice);
 	}
     return false;

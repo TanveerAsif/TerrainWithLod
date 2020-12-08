@@ -58,6 +58,7 @@ float4 MyPixelShader(PixelInput input) : SV_TARGET
 	//if(input.worldPos.y > 5.0)
 	//float4 FinalColor = rockColor + iceColor * input.worldPos.y * 0.25;
 	float scalarFactor = input.worldPos.y * 0.25;
+	//iceColor = float4(0, 1, 0, 1.0);
 	float4 FinalColor = lerp(rockColor, iceColor, scalarFactor);
 	return FinalColor;
 };
