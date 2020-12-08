@@ -69,7 +69,7 @@ bool Dx11_Terrain2::InitShader(ID3D11Device* _pDevice)
 
 	D3D11_SAMPLER_DESC samplerDesc;
 	ZeroMemory(&samplerDesc, sizeof(samplerDesc));
-	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.Filter =  D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -303,7 +303,8 @@ Dx11_Terrain2::Dx11_Terrain2()
 	m_pInputLayout(nullptr),
 	m_pSamplerState(nullptr),
 	m_pHeightMap(nullptr),
-	m_pTexture(nullptr)
+	m_pTexture1(nullptr),
+	m_pTexture2(nullptr)
 {
 }
 
@@ -315,8 +316,11 @@ bool Dx11_Terrain2::Init(ID3D11Device* _pDevice)
 {
 	if (this->InitShader(_pDevice))
 	{
-		m_pTexture = new Dx11_Texture();
-		m_pTexture->Initiazlize(_pDevice, L"../../Data/grass-and-straw-terrain.dds");
+		m_pTexture1 = new Dx11_Texture();
+		m_pTexture1->Initiazlize(_pDevice, L"../../Data/aerial_grass_rock_diff_1k.dds");
+
+		m_pTexture2 = new Dx11_Texture();
+		m_pTexture2->Initiazlize(_pDevice, L"../../Data/snow_02_diff_1k.dds");
 
 		//First need to be initialize height map before init buffers
 		if(this->LoadHeightMap("../../Data/heightmap01.bmp"))
@@ -353,9 +357,14 @@ void Dx11_Terrain2::Render(ID3D11DeviceContext* _pDeviceContext, D3DXMATRIX _wor
 	_pDeviceContext->Unmap(m_pWVPBuffer, 0);
 	_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pWVPBuffer);
 
-	ID3D11ShaderResourceView* pTexture = m_pTexture->GetTexture();	
-	if(pTexture)
-		_pDeviceContext->PSSetShaderResources(0, 1, &pTexture);
+	ID3D11ShaderResourceView* pTexture1 = m_pTexture1->GetTexture();
+	ID3D11ShaderResourceView* pTexture2 = m_pTexture2->GetTexture();
+	if(pTexture1)
+		_pDeviceContext->PSSetShaderResources(0, 1, &pTexture1);
+
+	if (pTexture2)
+		_pDeviceContext->PSSetShaderResources(1, 1, &pTexture2);
+
 	_pDeviceContext->PSSetSamplers(0, 1, &m_pSamplerState);
 
 	_pDeviceContext->VSSetShader(m_pVS, nullptr, 0);

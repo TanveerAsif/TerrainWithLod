@@ -48,7 +48,7 @@ private:
 	bool					InitBuffer(ID3D11Device* _pDevice);
 	bool					LoadHeightMap(std::string _sHeightMapFile);
 	
-	Dx11_Texture			*m_pTexture;
+	Dx11_Texture			*m_pTexture1, *m_pTexture2;
 
 public:
 	Dx11_Terrain2();

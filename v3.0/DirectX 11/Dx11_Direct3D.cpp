@@ -131,7 +131,7 @@ bool Dx11_Direct3D::Initialize(HWND hWnd, int screenWidth, int screenHeight)
 					if (hr == S_OK)
 					{
 						// Set the depth stencil state.
-						//m_pDeviceContext->OMSetDepthStencilState(m_pDepthStencilState, 1);
+						m_pDeviceContext->OMSetDepthStencilState(m_pDepthStencilState, 1);
 
 						depthStencilDesc.DepthEnable = false;
 						hr = m_pDevice->CreateDepthStencilState(&depthStencilDesc, &m_pDepthStencilStateOff);
@@ -150,8 +150,8 @@ bool Dx11_Direct3D::Initialize(HWND hWnd, int screenWidth, int screenHeight)
 						if (hr == S_OK)
 						{
 							// Bind the render target view and depth stencil buffer to the output render pipeline.
-							//m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
-							m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
+							m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
+							//m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
 
 							D3D11_RASTERIZER_DESC rasterDesc, rasterDescWireFrame;
 							ZeroMemory(&rasterDesc, sizeof(D3D11_RASTERIZER_DESC));
@@ -416,7 +416,7 @@ bool Dx11_Direct3D::BeginScene()
 		//float color[4] = { 0.5f, 0.5f, 0.5f, 1.0f };	//FOG
 		//float color[4] = { 0.0f, 0.125f, 0.3f, 1.0f };	
 		m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, color);
-		//m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+		m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 		return true;
 	}

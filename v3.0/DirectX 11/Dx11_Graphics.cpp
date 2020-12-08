@@ -139,6 +139,8 @@ void Dx11_Graphics::RenderScene(float _fTick)
 {
 	if (m_pDirect3D->BeginScene())
 	{
+		//m_pDirect3D->SetDepthBufferON();
+		//m_pDirect3D->EnableBlendState();
 		ID3D11DeviceContext *pDeviceContext = m_pDirect3D->GetDeviceContext();
 		D3DXMATRIX viewMat, worldMat, projectionMat, orthoMat;
 		D3DXMATRIX matRotY, matTranslate, matRot, matScale, matTransform;
@@ -181,7 +183,7 @@ void Dx11_Graphics::RenderScene(float _fTick)
 
 		//RENDER TEXT
 		//m_pDirect3D->SetDepthBufferOFF();
-		m_pDirect3D->EnableBlendState();
+		//m_pDirect3D->EnableBlendState();
 		worldMat = m_pDirect3D->GetWorldMatrix();
 		orthoMat = m_pDirect3D->GetOrthogonalProjectionMatrix();
 		char strCameraPos[100];
@@ -190,7 +192,7 @@ void Dx11_Graphics::RenderScene(float _fTick)
 		//sprintf_s(strCameraPos, "CameraPos = (%.0f,%0.0f,%0.0f) CameraDir(%.1f,%0.1f,%0.1f)", vPos.x, vPos.y, vPos.z, vDir.x, vDir.y, vDir.z);
 		sprintf_s(strCameraPos, "CameraPos(%0.1f,%0.1f,%0.1f)", vPos.x, vPos.y, vPos.z);
 		m_pText->Render(pDeviceContext, strCameraPos, worldMat, orthoMat);
-		m_pDirect3D->DisableBlendState();
+		//m_pDirect3D->DisableBlendState();
 		//m_pDirect3D->SetDepthBufferON();
 				
 		m_pDirect3D->EndScene();
@@ -212,7 +214,8 @@ void Dx11_Graphics::ShowWireFrame()
 		if (m_bIsWireFrameEnable == false)
 			m_pDirect3D->SetRasterWireframe();
 		else
-			m_pDirect3D->SetRasterSolid();
+			//m_pDirect3D->SetRasterSolid();
+			m_pDirect3D->SetRasterStateBackFace();
 		
 		m_bIsWireFrameEnable = (m_bIsWireFrameEnable == false) ? true : false;		
 	}
