@@ -69,15 +69,15 @@ bool Dx11_Graphics::Initialize(HWND hWnd, UINT _width, UINT _height)
 			return bRetValue;
 		}*/
 
-		m_pTerrain2 = new Dx11_Terrain2();
+		/*m_pTerrain2 = new Dx11_Terrain2();
 		m_pTerrain2->Init(pDevice);
 		if (!bRetValue)
-			return bRetValue;
+			return bRetValue;*/
 
-		/*m_pTessellation = new Dx11_Tessellation();
+		m_pTessellation = new Dx11_Tessellation();
 		bRetValue = m_pTessellation->Init(pDevice, pDeviceContext);
 		if (!bRetValue)
-			return bRetValue;*/
+			return bRetValue;
 
 	}
 	else

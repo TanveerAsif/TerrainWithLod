@@ -1,7 +1,7 @@
 #pragma once
 #include "Dx11_Terrain.h"
 #define _TESSELLATION_
-
+class Dx11_Texture;
 class Dx11_QuadTree
 {
 	const unsigned int		m_cMAX_TRIANGLES_PER_NODE = 100;
@@ -32,7 +32,7 @@ protected:
 		float fTessellationAmount;		
 		float fPadding[3];
 	};
-
+	Dx11_Texture* m_pTexture1, * m_pTexture2;
 protected:
 	D3DXMATRIX			m_worldMat, m_viewMat, m_projMat;
 	ID3D11VertexShader  *m_pVS = nullptr;	
@@ -40,6 +40,7 @@ protected:
 	ID3D11DomainShader	*m_pDS = nullptr;
 	ID3D11PixelShader   *m_pPS = nullptr;
 	ID3D11InputLayout	*m_pInputLayout = nullptr;
+	ID3D11SamplerState	*m_pSamplerState = nullptr;
 	ID3D11Buffer		*m_pWVPBuffer = nullptr, *m_pQuadColor = nullptr, *m_pTessellationBuffer = nullptr;
 	
 	Dx11_Terrain::stVertex  *m_pVertexList = nullptr;

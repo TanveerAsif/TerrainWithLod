@@ -100,6 +100,7 @@ struct PixelInput
 	float4 position : SV_POSITION;
 	float2 tex  : TEXCOORD0;
 	float3 norm : NORMAL;
+	float4 worldPos : TEXCOORD1;
 };
 
 cbuffer MatrixBuffer: register(b1)
@@ -122,7 +123,7 @@ PixelInput MyDomainShader(PatchOutput input, float3 uvwCoord : SV_DomainLocation
 	
 	//Determine new position of vertex
 	float3 vertexNewPos =  uvwCoord.x * patch[0].Position + uvwCoord.y * patch[1].Position + uvwCoord.z * patch[2].Position;
-	
+	float2 vertexNewTex =  uvwCoord.x * patch[0].tex      + uvwCoord.y * patch[1].tex      + uvwCoord.z * patch[2].tex;
 	//position.x += a * sin(k * position.y + f * time);	
 	//y = a * sin(k - w * time);
 	
@@ -133,11 +134,14 @@ PixelInput MyDomainShader(PatchOutput input, float3 uvwCoord : SV_DomainLocation
 	
 	output.position = float4(vertexNewPos, 1.0f);
 	output.position = mul(output.position, worldMat);
+	output.worldPos = output.position;
+
 	output.position = mul(output.position, viewMat);
 	output.position = mul(output.position, projMat);
 	
+	output.tex = vertexNewTex;
 	
-	output.tex = patch[0].tex;	
+	//output.tex = patch[0].tex;	
 	output.norm = patch[0].normal;	
 	return output;
 };
@@ -152,8 +156,32 @@ cbuffer QuadColor: register(b3)
 {
 	float4 quadColor;	
 };
+Texture2D		RockTexture : register(t0);
+Texture2D		IceTexture : register(t1);
+SamplerState textureSampler;
+
 float4 MyPixelShader(PixelInput input) : SV_TARGET
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
-	//return quadColor;
+	////////float scalarValue = 1 / fTessAmount;
+	//////float4 PixelColor = float4(0.0f, 1.0f, 0.0f, 1.0f);
+	//////if(fTessAmount < 2)
+	//////	PixelColor = float4(0.0f, 0.5f, 0.0f, 1.0f);
+	//////else
+	//////{
+	//////	if (fTessAmount < 5)
+	//////		PixelColor = float4(0.0f, 0.75f, 0.0f, 1.0f);
+	//////	else
+	//////		PixelColor = float4(0.0f, 1.05f, 0.0f, 1.0f);
+	//////}
+	////////return scalarValue * float4(0.0f, 0.0f, 1.0f, 1.0f) ;
+	////////return quadColor;
+	//////return PixelColor;
+	float4 rockColor = RockTexture.Sample(textureSampler, input.tex);
+	float4 iceColor = IceTexture.Sample(textureSampler, input.tex);
+	//if(input.worldPos.y > 5.0)
+	//float4 FinalColor = rockColor + iceColor * input.worldPos.y * 0.25;
+	float scalarFactor = input.worldPos.y * 0.25;
+	//iceColor = float4(0, 1, 0, 1.0);
+	float4 FinalColor = lerp(rockColor, iceColor, scalarFactor);
+	return FinalColor;
 };

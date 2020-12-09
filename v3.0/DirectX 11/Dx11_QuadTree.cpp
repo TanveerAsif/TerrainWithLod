@@ -1,6 +1,7 @@
 #include "Dx11_QuadTree.h"
 #include <fstream>
 #include <math.h>
+#include "Dx11_Texture.h"
 
 bool errorLogger(ID3D10Blob *_pErrorBuffer)
 {
@@ -89,6 +90,25 @@ bool Dx11_QuadTree::IntializeShader(ID3D11Device * _pDevice)
 	buffDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	buffDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	hr = _pDevice->CreateBuffer(&buffDesc, nullptr, &m_pQuadColor);
+	if (hr != S_OK)
+		return false;
+
+	D3D11_SAMPLER_DESC samplerDesc;
+	ZeroMemory(&samplerDesc, sizeof(samplerDesc));
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MipLODBias = 0.0f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.BorderColor[0] = 0;
+	samplerDesc.BorderColor[1] = 0;
+	samplerDesc.BorderColor[2] = 0;
+	samplerDesc.BorderColor[3] = 0;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	hr = _pDevice->CreateSamplerState(&samplerDesc, &m_pSamplerState);
 	if (hr != S_OK)
 		return false;
 
@@ -203,6 +223,26 @@ bool Dx11_QuadTree::InitializaTessalationShader(ID3D11Device * _pDevice)
 	hr = _pDevice->CreateBuffer(&QuadColorDesc, nullptr, &m_pQuadColor);
 	if (hr != S_OK)
 		return false;
+
+	D3D11_SAMPLER_DESC samplerDesc;
+	ZeroMemory(&samplerDesc, sizeof(samplerDesc));
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;//D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;//D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;//D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MipLODBias = 0.0f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.BorderColor[0] = 0;
+	samplerDesc.BorderColor[1] = 0;
+	samplerDesc.BorderColor[2] = 0;
+	samplerDesc.BorderColor[3] = 0;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	hr = _pDevice->CreateSamplerState(&samplerDesc, &m_pSamplerState);
+	if (hr != S_OK)
+		return false;
+
 	return true;
 }
 
@@ -351,7 +391,7 @@ void Dx11_QuadTree::RenderQuadNodeWithTessellation(ID3D11DeviceContext * _pDevic
 	_pDeviceContext->DSSetConstantBuffers(1, 1, &m_pWVPBuffer);
 
 	
-	
+	_pDeviceContext->PSSetConstantBuffers(0, 1, &m_pTessellationBuffer);
 	/*m_uiQuadColorCounter++;
 	if (m_uiQuadColorCounter > 3)
 		m_uiQuadColorCounter = 0;
@@ -364,6 +404,15 @@ void Dx11_QuadTree::RenderQuadNodeWithTessellation(ID3D11DeviceContext * _pDevic
 	pQuadColor->vColor = *pNewQuadColor;
 	_pDeviceContext->Unmap(m_pQuadColor, 0);
 	_pDeviceContext->PSSetConstantBuffers(3, 1, &m_pQuadColor);*/
+	ID3D11ShaderResourceView* pTexture1 = m_pTexture1->GetTexture();
+	ID3D11ShaderResourceView* pTexture2 = m_pTexture2->GetTexture();
+	if (pTexture1)
+		_pDeviceContext->PSSetShaderResources(0, 1, &pTexture1);
+
+	if (pTexture2)
+		_pDeviceContext->PSSetShaderResources(1, 1, &pTexture2);
+
+	_pDeviceContext->PSSetSamplers(0, 1, &m_pSamplerState);
 
 	_pDeviceContext->VSSetShader(m_pVS, nullptr, 0);
 	_pDeviceContext->HSSetShader(m_pHS, nullptr, 0);
@@ -385,20 +434,20 @@ void Dx11_QuadTree::CalculateMeshDimension(unsigned int _uiVertexCount, float & 
 {	
 	for (unsigned int  i = 0; i < _uiVertexCount; i++)
 	{
-		_fCenterX += m_pVertexList[i].vPos.x;
-		_fCenterZ += m_pVertexList[i].vPos.z;
+		_fCenterX += m_pVertexList[i].pos.x;
+		_fCenterZ += m_pVertexList[i].pos.z;
 	}
 	_fCenterX = _fCenterX / _uiVertexCount;
 	_fCenterZ = _fCenterZ / _uiVertexCount;
 
 	float maxWidth = 0.0f, maxDepth = 0.0f;
-	float minWidth = _fCenterX - m_pVertexList[0].vPos.x;
-	float minDepth = _fCenterZ - m_pVertexList[0].vPos.z;
+	float minWidth = _fCenterX - m_pVertexList[0].pos.x;
+	float minDepth = _fCenterZ - m_pVertexList[0].pos.z;
 
 	for (unsigned int i = 0; i < _uiVertexCount; i++)
 	{
-		float w = _fCenterX - m_pVertexList[i].vPos.x;
-		float d = _fCenterZ - m_pVertexList[i].vPos.z;
+		float w = _fCenterX - m_pVertexList[i].pos.x;
+		float d = _fCenterZ - m_pVertexList[i].pos.z;
 
 		if (minWidth < w) minWidth = w;
 		if (minDepth < d) minDepth = d;
@@ -501,13 +550,13 @@ void Dx11_QuadTree::CreateTreeNode(ID3D11Device * _pDevice, stNode **_pNode, flo
 
 bool Dx11_QuadTree::IsTriangleContained(unsigned int _uiVertexIndex, float _fCenterX, float _fCenterZ, float _fWidth)
 {
-	float x1 = m_pVertexList[_uiVertexIndex].vPos.x;
-	float x2 = m_pVertexList[_uiVertexIndex + 1].vPos.x;
-	float x3 = m_pVertexList[_uiVertexIndex + 2].vPos.x;
+	float x1 = m_pVertexList[_uiVertexIndex].pos.x;
+	float x2 = m_pVertexList[_uiVertexIndex + 1].pos.x;
+	float x3 = m_pVertexList[_uiVertexIndex + 2].pos.x;
 
-	float z1 = m_pVertexList[_uiVertexIndex].vPos.z;
-	float z2 = m_pVertexList[_uiVertexIndex + 1].vPos.z;
-	float z3 = m_pVertexList[_uiVertexIndex + 2].vPos.z;
+	float z1 = m_pVertexList[_uiVertexIndex].pos.z;
+	float z2 = m_pVertexList[_uiVertexIndex + 1].pos.z;
+	float z3 = m_pVertexList[_uiVertexIndex + 2].pos.z;
 	
 	float minX = min(x1, min(x2, x3));
 	float minZ = min(z1, min(z2, z3));
@@ -576,6 +625,12 @@ Dx11_QuadTree::~Dx11_QuadTree()
 
 bool Dx11_QuadTree::BuildQuadTree(ID3D11Device	*_pDevice, Dx11_Terrain	*_pTerrain)
 {	
+	m_pTexture1 = new Dx11_Texture();
+	m_pTexture1->Initiazlize(_pDevice, L"../../Data/aerial_grass_rock_diff_1k.dds");
+
+	m_pTexture2 = new Dx11_Texture();
+	m_pTexture2->Initiazlize(_pDevice, L"../../Data/snow_02_diff_1k.dds");
+
 	//Terrain Failed To Generate Vertices
 	if (!_pTerrain->Init(_pDevice))
 		return false;

@@ -2,22 +2,34 @@
 #include <D3D11.h>
 #include <D3DX10math.h>
 #include <D3DX11async.h>
-
+#include <string>
 
 class Dx11_Terrain
 {
 public:
-	struct stVertex
+	struct  stVertex
 	{
-		D3DXVECTOR3 vPos;
-		D3DXVECTOR2 vTex;
-		D3DXVECTOR3 vNormal;
+		D3DXVECTOR3 pos;
+		D3DXVECTOR2 tex;
+		D3DXVECTOR3 normal;
 	};
 	unsigned int m_iVertexCount;
+
 
 private:
 	unsigned int m_iWidth, m_iHeight;
 	stVertex	*m_pVertexList;
+	bool					LoadHeightMap(std::string _sHeightMapFile);
+
+	struct stHeightMap
+	{
+		float x, y, z;
+		float tX, tY;
+		float nX;
+		float nY;
+		float nZ;
+	};
+	stHeightMap* m_pHeightMap;
 
 public:
 	Dx11_Terrain();
