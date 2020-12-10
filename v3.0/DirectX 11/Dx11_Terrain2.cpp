@@ -91,56 +91,137 @@ bool Dx11_Terrain2::InitShader(ID3D11Device* _pDevice)
 
 bool Dx11_Terrain2::InitBuffer(ID3D11Device* _pDevice)
 {		
-	m_nVertexCount = 6 * (m_uiWidth - 1) * (m_uiHeight - 1);
+	//m_nVertexCount = 6 * (m_uiWidth - 1) * (m_uiHeight - 1);
+	
+	// Calculate the number of vertices in the terrain mesh.
+	m_nVertexCount = (m_uiWidth - 1) * (m_uiHeight - 1) * 12;
 	stVertex* pVertexList = new stVertex[m_nVertexCount];
 	unsigned int index = 0;
+	m_nIndexCount = m_nVertexCount;
+	unsigned int* pIndexList = new unsigned int[m_nIndexCount];
 	for (unsigned int iCol = 0; iCol < m_uiHeight - 1; iCol++)
 	{
 		for (unsigned int iRow = 0; iRow < m_uiWidth - 1; iRow++)
 		{			
-			unsigned int v1 = (m_uiHeight * iCol) + iRow;
-			unsigned int v2 = (m_uiHeight * iCol) + (iRow + 1);
-			unsigned int v3 = (m_uiHeight * (iCol + 1)) + (iRow + 1);
-			unsigned int v4 = (m_uiHeight * (iCol + 1)) + (iRow);
+			//unsigned int v1 = (m_uiHeight * iCol) + iRow;
+			//unsigned int v2 = (m_uiHeight * iCol) + (iRow + 1);
+			//unsigned int v3 = (m_uiHeight * (iCol + 1)) + (iRow + 1);
+			//unsigned int v4 = (m_uiHeight * (iCol + 1)) + (iRow);
 
-			//First
-			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v1].x, m_pHeightMap[v1].y, m_pHeightMap[v1].z);
-			pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v1].tX, m_pHeightMap[v1].tY);
-			pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v1].nX, m_pHeightMap[v1].nY, m_pHeightMap[v1].nZ);
+			////First
+			//pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v1].x, m_pHeightMap[v1].y, m_pHeightMap[v1].z);
+			//pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v1].tX, m_pHeightMap[v1].tY);
+			//pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v1].nX, m_pHeightMap[v1].nY, m_pHeightMap[v1].nZ);
+			//index++;
+
+			//pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v2].x, m_pHeightMap[v2].y, m_pHeightMap[v2].z);
+			//pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v2].tX, m_pHeightMap[v2].tY);
+			//pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v2].nX, m_pHeightMap[v2].nY, m_pHeightMap[v2].nZ);
+			//index++;
+
+			//pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v3].x, m_pHeightMap[v3].y, m_pHeightMap[v3].z);
+			//pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v3].tX, m_pHeightMap[v3].tY);
+			//pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v3].nX, m_pHeightMap[v3].nY, m_pHeightMap[v3].nZ);
+			//index++;
+
+			////Second
+			//pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v3].x, m_pHeightMap[v3].y, m_pHeightMap[v3].z);
+			//pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v3].tX, m_pHeightMap[v3].tY);
+			//pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v3].nX, m_pHeightMap[v3].nY, m_pHeightMap[v3].nZ);
+			//index++;
+
+			//pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v4].x, m_pHeightMap[v4].y, m_pHeightMap[v4].z);
+			//pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v4].tX, m_pHeightMap[v4].tY);
+			//pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v4].nX, m_pHeightMap[v4].nY, m_pHeightMap[v4].nZ);
+			//index++;
+
+			//pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v1].x, m_pHeightMap[v1].y, m_pHeightMap[v1].z);
+			//pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v1].tX, m_pHeightMap[v1].tY);
+			//pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v1].nX, m_pHeightMap[v1].nY, m_pHeightMap[v1].nZ);
+			//index++;
+			unsigned int index1 = (m_uiHeight * iCol) + iRow;          // Bottom left.
+			unsigned int index2 = (m_uiHeight * iCol) + (iRow + 1);      // Bottom right.
+			unsigned int index3 = (m_uiHeight * (iCol + 1)) + iRow;      // Upper left.
+			unsigned int index4 = (m_uiHeight * (iCol + 1)) + (iRow + 1);  // Upper right.
+
+			// Upper left.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index3].x, m_pHeightMap[index3].y, m_pHeightMap[index3].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
 			index++;
 
-			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v2].x, m_pHeightMap[v2].y, m_pHeightMap[v2].z);
-			pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v2].tX, m_pHeightMap[v2].tY);
-			pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v2].nX, m_pHeightMap[v2].nY, m_pHeightMap[v2].nZ);
+			// Upper right.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index4].x, m_pHeightMap[index4].y, m_pHeightMap[index4].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
 			index++;
 
-			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v3].x, m_pHeightMap[v3].y, m_pHeightMap[v3].z);
-			pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v3].tX, m_pHeightMap[v3].tY);
-			pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v3].nX, m_pHeightMap[v3].nY, m_pHeightMap[v3].nZ);
+			// Upper right.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index4].x, m_pHeightMap[index4].y, m_pHeightMap[index4].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
 			index++;
 
-			//Second
-			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v3].x, m_pHeightMap[v3].y, m_pHeightMap[v3].z);
-			pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v3].tX, m_pHeightMap[v3].tY);
-			pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v3].nX, m_pHeightMap[v3].nY, m_pHeightMap[v3].nZ);
+			// Bottom left.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index1].x, m_pHeightMap[index1].y, m_pHeightMap[index1].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
 			index++;
 
-			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v4].x, m_pHeightMap[v4].y, m_pHeightMap[v4].z);
-			pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v4].tX, m_pHeightMap[v4].tY);
-			pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v4].nX, m_pHeightMap[v4].nY, m_pHeightMap[v4].nZ);
+			// Bottom left.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index1].x, m_pHeightMap[index1].y, m_pHeightMap[index1].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
 			index++;
 
-			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[v1].x, m_pHeightMap[v1].y, m_pHeightMap[v1].z);
-			pVertexList[index].tex = D3DXVECTOR2(m_pHeightMap[v1].tX, m_pHeightMap[v1].tY);
-			pVertexList[index].normal = D3DXVECTOR3(m_pHeightMap[v1].nX, m_pHeightMap[v1].nY, m_pHeightMap[v1].nZ);
+			// Upper left.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index3].x, m_pHeightMap[index3].y, m_pHeightMap[index3].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
+			index++;
+
+			// Bottom left.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index1].x, m_pHeightMap[index1].y, m_pHeightMap[index1].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
+			index++;
+
+			// Upper right.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index4].x, m_pHeightMap[index4].y, m_pHeightMap[index4].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
+			index++;
+
+			// Upper right.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index4].x, m_pHeightMap[index4].y, m_pHeightMap[index4].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
+			index++;
+
+			// Bottom right.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index2].x, m_pHeightMap[index2].y, m_pHeightMap[index2].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
+			index++;
+
+			// Bottom right.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index2].x, m_pHeightMap[index2].y, m_pHeightMap[index2].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
+			index++;
+
+			// Bottom left.
+			pVertexList[index].pos = D3DXVECTOR3(m_pHeightMap[index1].x, m_pHeightMap[index1].y, m_pHeightMap[index1].z);
+			pVertexList[index].normal = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+			pIndexList[index] = index;
 			index++;
 		}
 	}
 
-	m_nIndexCount = m_nVertexCount;
-	unsigned int* pIndexList = new unsigned int[m_nIndexCount];
+	//m_nIndexCount = m_nVertexCount;
+	/*unsigned int* pIndexList = new unsigned int[m_nIndexCount];
 	for (size_t i = 0; i < m_nIndexCount; i++)
-		pIndexList[i] = i;
+		pIndexList[i] = i;*/
 
 	D3D11_BUFFER_DESC vertDesc, indxDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
@@ -255,10 +336,10 @@ bool Dx11_Terrain2::LoadHeightMap(std::string _sHeightMapFile)
 		return false;
 	}
 
-	// Initialize the position in the image data buffer.
+	// Initialize the pos in the image data buffer.
 	k = 0;
 
-	float fScalarValue = 10;
+	float fScalarValue = 0;// 10;
 	// Read the image data into the height map.
 	for (j = 0; j < m_uiHeight; j++)
 	{
@@ -291,8 +372,8 @@ bool Dx11_Terrain2::LoadHeightMap(std::string _sHeightMapFile)
 }
 
 Dx11_Terrain2::Dx11_Terrain2()
-	:m_uiWidth(0),
-	m_uiHeight(0),
+	:m_uiWidth(15*10),
+	m_uiHeight(10*10),
 	m_nVertexCount(0),
 	m_nIndexCount(0),
 	m_pVertexBuffer(nullptr),
@@ -306,6 +387,35 @@ Dx11_Terrain2::Dx11_Terrain2()
 	m_pTexture1(nullptr),
 	m_pTexture2(nullptr)
 {
+	
+	m_pHeightMap = new stHeightMap[m_uiWidth * m_uiHeight];
+	
+	// Initialize the pos in the image data buffer.
+	unsigned int k = 0;
+
+	float fScalarValue = 10;
+	// Read the image data into the height map.
+	for (unsigned int j = 0; j < m_uiHeight; j++)
+	{
+		for (unsigned int i = 0; i < m_uiWidth; i++)
+		{
+			unsigned int index = (m_uiHeight * j) + i;
+
+			m_pHeightMap[index].x = (float)i;
+			m_pHeightMap[index].y = 0.0f;
+			m_pHeightMap[index].z = (float)j;
+
+			m_pHeightMap[index].tX = (float)i / (m_uiWidth - 1);
+			m_pHeightMap[index].tY = (float)j / (m_uiHeight - 1);
+
+			m_pHeightMap[index].nX = 1.0f;
+			m_pHeightMap[index].nY = 1.0f;
+			m_pHeightMap[index].nZ = 1.0f;
+
+			k += 3;
+		}
+	}
+
 }
 
 Dx11_Terrain2::~Dx11_Terrain2()
@@ -316,11 +426,11 @@ bool Dx11_Terrain2::Init(ID3D11Device* _pDevice)
 {
 	if (this->InitShader(_pDevice))
 	{
-		m_pTexture1 = new Dx11_Texture();
+		/*m_pTexture1 = new Dx11_Texture();
 		m_pTexture1->Initiazlize(_pDevice, L"../../Data/aerial_grass_rock_diff_1k.dds");
 
 		m_pTexture2 = new Dx11_Texture();
-		m_pTexture2->Initiazlize(_pDevice, L"../../Data/snow_02_diff_1k.dds");
+		m_pTexture2->Initiazlize(_pDevice, L"../../Data/snow_02_diff_1k.dds");*/
 
 		//First need to be initialize height map before init buffers
 		//if(this->LoadHeightMap("../../Data/heightmap01.bmp"))
@@ -359,14 +469,24 @@ void Dx11_Terrain2::Render(ID3D11DeviceContext* _pDeviceContext, D3DXMATRIX _wor
 	_pDeviceContext->Unmap(m_pWVPBuffer, 0);
 	_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pWVPBuffer);
 
-	ID3D11ShaderResourceView* pTexture1 = m_pTexture1->GetTexture();
-	ID3D11ShaderResourceView* pTexture2 = m_pTexture2->GetTexture();
-	if(pTexture1)
-		_pDeviceContext->PSSetShaderResources(0, 1, &pTexture1);
+	if (m_pTexture1)
+	{
+		ID3D11ShaderResourceView* pTexture1 = m_pTexture1->GetTexture();
+		if (pTexture1)
+			_pDeviceContext->PSSetShaderResources(0, 1, &pTexture1);
+	}
+	
+	if (m_pTexture2)
+	{
+		ID3D11ShaderResourceView* pTexture2 = m_pTexture2->GetTexture();
+		if (pTexture2)
+			_pDeviceContext->PSSetShaderResources(1, 1, &pTexture2);
 
-	if (pTexture2)
-		_pDeviceContext->PSSetShaderResources(1, 1, &pTexture2);
+	}
+	
+	
 
+	
 	_pDeviceContext->PSSetSamplers(0, 1, &m_pSamplerState);
 
 	_pDeviceContext->VSSetShader(m_pVS, nullptr, 0);
