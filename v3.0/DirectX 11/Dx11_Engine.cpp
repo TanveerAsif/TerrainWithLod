@@ -26,7 +26,7 @@ bool Dx11_Engine::Initialize(HWND _hWnd, unsigned int _uWidth, unsigned int _uHe
 	bool bRetValue = false;
 
 #ifdef VISUALIZATION_APPLICATION
-	if (!InitializeWindow(500, 100, _uWidth, _uHeight))
+	if (!InitializeWindow(350, 100, _uWidth, _uHeight))
 		return false;
 #else
 	m_hWnd = _hWnd;

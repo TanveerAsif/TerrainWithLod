@@ -8,7 +8,7 @@ Dx11_Engine *g_pEngine = NULL;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdShow)
 {
-	unsigned int w = 1400;
+	unsigned int w = 1550;
 	unsigned int h = 900;
 	g_pEngine = new Dx11_Engine();	
 	//if (g_pEngine->Initialize(0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)))
