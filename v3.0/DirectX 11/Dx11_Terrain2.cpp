@@ -339,7 +339,7 @@ bool Dx11_Terrain2::LoadHeightMap(std::string _sHeightMapFile)
 	// Initialize the pos in the image data buffer.
 	k = 0;
 
-	float fScalarValue = 0;// 10;
+	float fScalarValue = 10;
 	// Read the image data into the height map.
 	for (j = 0; j < m_uiHeight; j++)
 	{
@@ -426,16 +426,16 @@ bool Dx11_Terrain2::Init(ID3D11Device* _pDevice)
 {
 	if (this->InitShader(_pDevice))
 	{
-		/*m_pTexture1 = new Dx11_Texture();
+		m_pTexture1 = new Dx11_Texture();
 		m_pTexture1->Initiazlize(_pDevice, L"../../Data/aerial_grass_rock_diff_1k.dds");
 
 		m_pTexture2 = new Dx11_Texture();
-		m_pTexture2->Initiazlize(_pDevice, L"../../Data/snow_02_diff_1k.dds");*/
+		m_pTexture2->Initiazlize(_pDevice, L"../../Data/snow_02_diff_1k.dds");
 
 		//First need to be initialize height map before init buffers
-		//if(this->LoadHeightMap("../../Data/heightmap01.bmp"))
+		if(this->LoadHeightMap("../../Data/heightmap01.bmp"))
 		//if (this->LoadHeightMap("../../Data/Terrain/heightmap.bmp"))
-		if (this->LoadHeightMap("../../Data/Terrain/heightmapSmiley.bmp"))			
+		//if (this->LoadHeightMap("../../Data/Terrain/heightmapSmiley.bmp"))			
 			return this->InitBuffer(_pDevice);
 	}
     return false;
@@ -483,10 +483,10 @@ void Dx11_Terrain2::Render(ID3D11DeviceContext* _pDeviceContext, D3DXMATRIX _wor
 			_pDeviceContext->PSSetShaderResources(1, 1, &pTexture2);
 
 	}
-	
-	
+		
 
-	
+
+
 	_pDeviceContext->PSSetSamplers(0, 1, &m_pSamplerState);
 
 	_pDeviceContext->VSSetShader(m_pVS, nullptr, 0);
