@@ -26,7 +26,7 @@ bool Dx11_Engine::Initialize(HWND _hWnd, unsigned int _uWidth, unsigned int _uHe
 	bool bRetValue = false;
 
 #ifdef VISUALIZATION_APPLICATION
-	if (!InitializeWindow())
+	if (!InitializeWindow(500, 100, _uWidth, _uHeight))
 		return false;
 #else
 	m_hWnd = _hWnd;
@@ -98,7 +98,7 @@ void Dx11_Engine::Run()
 
 
 
-bool Dx11_Engine::InitializeWindow()
+bool Dx11_Engine::InitializeWindow(unsigned int _x, unsigned int _y, unsigned int _W, unsigned int _H)
 {
 	g_pEngineHandler = this;
 
@@ -122,7 +122,7 @@ bool Dx11_Engine::InitializeWindow()
 
 
 	m_hWnd = CreateWindowEx(WS_EX_APPWINDOW, L"Engine", L"Engine", WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP
-	, 400, 100, 1400, 800
+	, _x, _y, _W, _H
 	, 0, 0, m_hInstance, NULL);
 	
 	if (m_hWnd == NULL)

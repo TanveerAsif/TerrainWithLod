@@ -49,7 +49,7 @@ bool Dx11_Direct3D::Initialize(HWND hWnd, int screenWidth, int screenHeight)
 	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING::DXGI_MODE_SCALING_UNSPECIFIED;
 	
-	//swapDesc.SampleDesc.Count = 8;	//MULTI SAMPLING OF A PIXEL BY 8 NEARBY PIXEL
+    //swapDesc.SampleDesc.Count = 8;	//MULTI SAMPLING OF A PIXEL BY 8 NEARBY PIXEL
 	swapDesc.SampleDesc.Count = 1;	
 	swapDesc.SampleDesc.Quality = 0;
 
@@ -209,7 +209,7 @@ bool Dx11_Direct3D::Initialize(HWND hWnd, int screenWidth, int screenHeight)
 							{
 								// Now set the rasterizer state.
 								//m_pDeviceContext->RSSetState(m_pRasterStateFront);							 
-								m_pDeviceContext->RSSetState(/*m_pRasterState*/m_pRasterWireFrameState);
+								m_pDeviceContext->RSSetState(m_pRasterState/*m_pRasterWireFrameState*/);
 
 
 
