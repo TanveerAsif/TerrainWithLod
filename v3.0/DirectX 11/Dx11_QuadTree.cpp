@@ -404,13 +404,20 @@ void Dx11_QuadTree::RenderQuadNodeWithTessellation(ID3D11DeviceContext * _pDevic
 	pQuadColor->vColor = *pNewQuadColor;
 	_pDeviceContext->Unmap(m_pQuadColor, 0);
 	_pDeviceContext->PSSetConstantBuffers(3, 1, &m_pQuadColor);*/
-	ID3D11ShaderResourceView* pTexture1 = m_pTexture1->GetTexture();
-	ID3D11ShaderResourceView* pTexture2 = m_pTexture2->GetTexture();
-	if (pTexture1)
-		_pDeviceContext->PSSetShaderResources(0, 1, &pTexture1);
 
-	if (pTexture2)
-		_pDeviceContext->PSSetShaderResources(1, 1, &pTexture2);
+	if (m_pTexture1)
+	{
+		ID3D11ShaderResourceView* pTexture1 = m_pTexture1->GetTexture();
+		if (pTexture1)
+			_pDeviceContext->PSSetShaderResources(0, 1, &pTexture1);
+	}
+	
+	if (m_pTexture2)
+	{
+		ID3D11ShaderResourceView* pTexture2 = m_pTexture2->GetTexture();
+		if (pTexture2)
+			_pDeviceContext->PSSetShaderResources(1, 1, &pTexture2);
+	}	
 
 	_pDeviceContext->PSSetSamplers(0, 1, &m_pSamplerState);
 
@@ -625,12 +632,13 @@ Dx11_QuadTree::~Dx11_QuadTree()
 
 bool Dx11_QuadTree::BuildQuadTree(ID3D11Device	*_pDevice, Dx11_Terrain	*_pTerrain)
 {	
+	
 	m_pTexture1 = new Dx11_Texture();
 	m_pTexture1->Initiazlize(_pDevice, L"../../Data/aerial_grass_rock_diff_1k.dds");
 
 	m_pTexture2 = new Dx11_Texture();
 	m_pTexture2->Initiazlize(_pDevice, L"../../Data/snow_02_diff_1k.dds");
-
+	
 	//Terrain Failed To Generate Vertices
 	if (!_pTerrain->Init(_pDevice))
 		return false;

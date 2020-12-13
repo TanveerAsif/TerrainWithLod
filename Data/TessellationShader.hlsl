@@ -162,20 +162,26 @@ SamplerState textureSampler;
 
 float4 MyPixelShader(PixelInput input) : SV_TARGET
 {
-	////////float scalarValue = 1 / fTessAmount;
-	//////float4 PixelColor = float4(0.0f, 1.0f, 0.0f, 1.0f);
-	//////if(fTessAmount < 2)
-	//////	PixelColor = float4(0.0f, 0.5f, 0.0f, 1.0f);
-	//////else
-	//////{
-	//////	if (fTessAmount < 5)
-	//////		PixelColor = float4(0.0f, 0.75f, 0.0f, 1.0f);
-	//////	else
-	//////		PixelColor = float4(0.0f, 1.05f, 0.0f, 1.0f);
-	//////}
-	////////return scalarValue * float4(0.0f, 0.0f, 1.0f, 1.0f) ;
-	////////return quadColor;
-	//////return PixelColor;
+	////float scalarValue = 1 / fTessAmount;
+	//float scalarColor = 1.0;
+	//float4 PixelColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	//if(fTessAmount < 2)
+	//	scalarColor = 0.5f;
+	//else
+	//{
+	//	if (fTessAmount < 5)
+	//		scalarColor = 0.75f;
+	//	else
+	//		scalarColor = 1.0f;
+	//}
+	////return scalarValue * float4(0.0f, 0.0f, 1.0f, 1.0f) ;
+	//return quadColor;
+	////scalarColor = 1.0;
+	////PixelColor = float4(scalarColor, scalarColor, scalarColor, 1.0f);
+	////return PixelColor;
+	
+	
+	
 	float4 rockColor = RockTexture.Sample(textureSampler, input.tex);
 	float4 iceColor = IceTexture.Sample(textureSampler, input.tex);
 	//if(input.worldPos.y > 5.0)
